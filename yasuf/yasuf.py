@@ -39,8 +39,12 @@ class Yasuf:
         self._synchronize_time()
         for message in self._get_message():
             if message.get('type') == 'message':
+                if message.get('subtype') == "message_changed":
+                    text = message.get('message')['text']
+                else:
+                    text = message.get('text')
                 for trigger, fun in _handlers.items():
-                    match = trigger.match(message.get('text'))
+                    match = trigger.match(text)
                     if match:
                         self._send_message('Executing {} with '\
                                            'arguments {}:'.format(fun.__name__,
